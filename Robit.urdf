@@ -1,0 +1,552 @@
+<robot name="broBot">
+
+    <material name = "orange">
+        <color rgba="0.6 0.3 0.0 1.0"/>
+    </material>
+
+    <material name = "blue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+    </material>
+
+    <link name="base_link">
+        <inertial>
+            <origin xyz="0 0 0.0" rpy="0 0 0"/>
+            <mass value="1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+        <geometry>
+            <box size="2 1 0.2"/>
+        </geometry>
+        <material name="orange"/>
+        </visual>
+        <collision>
+        <geometry>
+            <box size="2 1 0.2"/>
+        </geometry>
+        </collision>
+    </link>
+
+    <link name="0RRot">
+        <inertial>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="0RArm">
+        <inertial>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="0RLeg">
+        <inertial>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="0LRot">
+        <inertial>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="0LArm">
+        <inertial>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="0LLeg">
+        <inertial>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="1RRot">
+        <inertial>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="1RArm">
+        <inertial>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="1RLeg">
+        <inertial>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="1LRot">
+        <inertial>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="1LArm">
+        <inertial>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="1LLeg">
+        <inertial>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="2RRot">
+        <inertial>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="2RArm">
+        <inertial>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.25 0.0" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="2RLeg">
+        <inertial>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="2LRot">
+        <inertial>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.1 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.2 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="2LArm">
+        <inertial>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.25 0.0" rpy="3.141 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="2LLeg">
+        <inertial>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <mass value=".1"/>
+            <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0.5 0.05" rpy="-3.141 0 0"/>
+            <geometry>
+                <box size="0.1 1 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name ="joint0RRot" type="revolute">
+        <axis xyz="0.0 0.0 1.0" rpy="0 0 -3.1416/2" />
+        <limit lower="-3.14159/2" upper="3.14159/2" effort="1.0" velocity="1.0"/>
+        <parent link="base_link"/>
+        <child link="0RRot"/>
+        <origin xyz="0.9 -0.5 -0.15"/>
+    </joint>
+
+    <joint name ="joint0RArm" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="0RRot"/>
+        <child link="0RArm"/>
+        <origin xyz="0.0 -0.2 0"/>
+    </joint>
+
+    <joint name ="joint0RLeg" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="0RArm"/>
+        <child link="0RLeg"/>
+        <origin xyz="0.0 -0.5 -0.05" rpy="1.5708 0 0"/>
+    </joint>
+
+    <joint name ="joint0LRot" type="revolute">
+        <axis xyz="0.0 0.0 1.0" rpy="0 0 -3.1416/2" />
+        <limit lower="-3.14159/2" upper="3.14159/2" effort="1.0" velocity="1.0"/>
+        <parent link="base_link"/>
+        <child link="0LRot"/>
+        <origin xyz="0.9 0.5 -0.15"/>
+    </joint>
+
+    <joint name ="joint0LArm" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="0LRot"/>
+        <child link="0LArm"/>
+        <origin xyz="0.0 0.2 0"/>
+    </joint>
+
+    <joint name ="joint0LLeg" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="0LArm"/>
+        <child link="0LLeg"/>
+        <origin xyz="0.0 0.5 -0.05" rpy="-1.5708 0 0"/>
+    </joint>
+
+    <joint name ="joint1RRot" type="revolute">
+        <axis xyz="0.0 0.0 1.0" rpy="0 0 -3.1416/2" />
+        <limit lower="3.14159/2" upper="-3.14159/2" effort="1.0" velocity="1.0"/>
+        <parent link="base_link"/>
+        <child link="1RRot"/>
+        <origin xyz="0 -0.5 -0.15"/>
+    </joint>
+
+    <joint name ="joint1RArm" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="1RRot"/>
+        <child link="1RArm"/>
+        <origin xyz="0.0 -0.2 0"/>
+    </joint>
+
+    <joint name ="joint1RLeg" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="1RArm"/>
+        <child link="1RLeg"/>
+        <origin xyz="0.0 -0.5 -0.05" rpy="1.5708 0 0"/>
+    </joint>
+
+    <joint name ="joint1LRot" type="revolute">
+        <axis xyz="0.0 0.0 1.0" rpy="0 0 -3.1416/2" />
+        <limit lower="3.14159/2" upper="-3.14159/2" effort="1.0" velocity="1.0"/>
+        <parent link="base_link"/>
+        <child link="1LRot"/>
+        <origin xyz="0 0.5 -0.15"/>
+    </joint>
+
+    <joint name ="joint1LArm" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="1LRot"/>
+        <child link="1LArm"/>
+        <origin xyz="0.0 0.2 0"/>
+    </joint>
+
+    <joint name ="joint1LLeg" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="1LArm"/>
+        <child link="1LLeg"/>
+        <origin xyz="0.0 0.5 -0.05" rpy="-1.5708 0 0"/>
+    </joint>
+
+    <joint name ="joint2RRot" type="revolute">
+        <axis xyz="0.0 0.0 1.0" rpy="0 0 -3.1416/2" />
+        <limit lower="-3.14159/2" upper="3.14159/2" effort="1.0" velocity="1.0"/>
+        <parent link="base_link"/>
+        <child link="2RRot"/>
+        <origin xyz="-0.9 -0.5 -0.15"/>
+    </joint>
+
+    <joint name ="joint2RArm" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="2RRot"/>
+        <child link="2RArm"/>
+        <origin xyz="0.0 -0.2 0"/>
+    </joint>
+
+    <joint name ="joint2RLeg" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="2RArm"/>
+        <child link="2RLeg"/>
+        <origin xyz="0.0 -0.5 -0.05" rpy="1.5708 0 0"/>
+    </joint>
+
+    <joint name ="joint2LRot" type="revolute">
+        <axis xyz="0.0 0.0 1.0" rpy="0 0 -3.1416/2" />
+        <limit lower="-3.14159/2" upper="3.14159/2" effort="1.0" velocity="1.0"/>
+        <parent link="base_link"/>
+        <child link="2LRot"/>
+        <origin xyz="-0.9 0.5 -0.15"/>
+    </joint>
+
+    <joint name ="joint2LArm" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="2LRot"/>
+        <child link="2LArm"/>
+        <origin xyz="0.0 0.2 0"/>
+    </joint>
+
+    <joint name ="joint2LLeg" type="revolute">
+        <axis xyz="1.0 0.0 0.0" rpy="0 0 0" />
+        <limit lower="0" upper="-3.14159" effort="1.0" velocity="1.0"/>
+        <parent link="2LArm"/>
+        <child link="2LLeg"/>
+        <origin xyz="0.0 0.5 -0.05" rpy="-1.5708 0 0"/>
+    </joint>
+
+</robot>

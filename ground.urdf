@@ -1,0 +1,21 @@
+<robot name="ground">
+  <link name="ground_plane">    
+    <inertial>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+
+    <visual>
+      <geometry>
+        <box size="20 20 0.0001" />
+      </geometry>
+      <material name="white" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="20 20 0.0001" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
