@@ -16,6 +16,7 @@ from stable_baselines3.common.env_checker import check_env
 # p.setRealTimeSimulation(1)
 targetpos = np.array((5, 0, 1))
 
+
 def getDist(array):
     return np.sqrt(sum(array[:]**2))
 
@@ -25,7 +26,7 @@ class Envr(gym.Env):
     with open('log.csv', 'w') as f:
         f.write(f"Got Closer ; Reached dist ; success ; failed\n")
 
-    p.connect(p.DIRECT)
+    p.connect(p.GUI)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
     gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
@@ -104,44 +105,34 @@ class Envr(gym.Env):
         with open('log.csv', 'a', newline='') as f:
             f.write(f"{self.gotCloser}; {self.reachedDist}; {self.success}; {self.failed}\n")
 
+if __name__ == "__main__":
+    env = Envr()
+    check_env(env)
 
-env = Envr()
-check_env(env)
-
-model = A2C("MlpPolicy", env, verbose=1)
-model.learn(total_timesteps=100000)
-model.save("KrabbelModel")
-del model
-p.disconnect()
+    model = A2C("MlpPolicy", env, verbose=1)
+    model.learn(total_timesteps=100)
+    model.save("KrabbelModel")
+    del model
+    p.disconnect()
 
 
-p.connect(p.GUI)
-gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
-p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
-p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
-p.changeDynamics(gorundPlane, -1, lateralFriction=2)
-p.setGravity(0, 0, -10)
+    p.connect(p.GUI)
+    gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
+    p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
+    p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
+    p.changeDynamics(gorundPlane, -1, lateralFriction=2)
+    p.setGravity(0, 0, -10)
 
-model = A2C.load("KrabbelModel")
-obs = env.reset()
+    env = Envr()
+    model = A2C.load("KrabbelModel")
+    obs = env.reset()
 
-qKey = ord('q')
-mKey = ord('m')
-start = False
-while p.isConnected():
-    keys = p.getKeyboardEvents()
-    # p.stepSimulation()
-    if qKey in keys:
-        print(f"Sim stopped by 'q'({qKey}) press")
-        p.disconnect()
-        break
-    if start:
+    qKey = ord('q')
+    mKey = ord('m')
+
+    for i in range(1000):
         action, _state = model.predict(obs, deterministic=True)
         obs, reward, done, info = env.step(action)
-    if mKey in keys:
-        obs = env.reset()
-        start = True
-        print(f"mkeey")
 
 
 
