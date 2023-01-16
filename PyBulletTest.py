@@ -87,13 +87,13 @@ def updateJoints():
 
 # updateJoints()
 # r.wait(2)
-p.setGravity(0, 0, -10)
+# p.setGravity(0, 0, -10)
 
 while p.isConnected():
     keys = p.getKeyboardEvents()
     # updateJoints()
     pos, rot = r.getOrientation()
-    r.jointMover(np.zeros(18))
+    r.jointMover(np.full(12, 1))
     # p.resetDebugVisualizerCamera(cameraDistance=5, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=pos)
     # r.plugWalk()
 

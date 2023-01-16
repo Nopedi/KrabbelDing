@@ -30,10 +30,10 @@ class Robit():
     def __init__(self, quaternion=None):
         if quaternion is None:
             quaternion = [0, 0, 0, 1]
-        self.selfIdRobit = p.loadURDF("robit.urdf", [0, 0, 1.5], quaternion)
+        self.selfIdRobit = p.loadURDF("Robit.urdf", [0, 0, 1.5], quaternion)
         p.changeDynamics(self.selfIdRobit, -1, lateralFriction=1)
         self.speed = 50
-        self.maxVal = 1
+        self.maxVal = 0.2
         self.queternion = quaternion
 
     def start(self):
@@ -70,6 +70,7 @@ class Robit():
         maxAngl = 50
         moveTimeOut = 0
         anglRad = interp(angles[:], (-1, 1), (-maxAngl, maxAngl))
+        # print(anglRad)
 
         self.rot0R(angle=anglRad[0])
         self.hub0R(angle=anglRad[1])
@@ -111,7 +112,7 @@ class Robit():
                 return False
             return True
         
-        while not isreached() and moveTimeOut < 2000:
+        while not isreached() and moveTimeOut < 200:
             moveTimeOut += 1
             p.stepSimulation()
 
@@ -160,27 +161,27 @@ class Robit():
 
     def hub0R(self, angle):
         self.moveJoint(1, angle=-angle)
-        self.moveJoint(2, angle=180 - 90 + angle)
+        self.moveJoint(2, angle=angle)
 
     def hub0L(self, angle):
         self.moveJoint(4, angle=angle)
-        self.moveJoint(5, angle=-180 + 90 - angle)
+        self.moveJoint(5, angle=-angle)
 
     def hub1R(self, angle):
         self.moveJoint(7, angle=-angle)
-        self.moveJoint(8, angle=180 - 90 + angle)
+        self.moveJoint(8, angle=angle)
 
     def hub1L(self, angle):
         self.moveJoint(10, angle=angle)
-        self.moveJoint(11, angle=-180 + 90 - angle)
+        self.moveJoint(11, angle=-angle)
 
     def hub2R(self, angle):
         self.moveJoint(13, angle=-angle)
-        self.moveJoint(14, angle=180 - 90 + angle)
+        self.moveJoint(14, angle=angle)
 
     def hub2L(self, angle):
         self.moveJoint(16, angle=angle)
-        self.moveJoint(17, angle=-180 + 90 - angle)
+        self.moveJoint(17, angle=-angle)
 
     def wait(self, delaytime):
         startTime = time.time()

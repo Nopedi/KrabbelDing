@@ -7,6 +7,7 @@ from Robit import Robit
 import pybullet as p
 import pybullet_data
 
+
 from stable_baselines3 import A2C
 from stable_baselines3.common.env_util import make_vec_env
 
@@ -30,11 +31,12 @@ class Envr(gym.Env):
         super().__init__()
         self.rendering(render)
         self.target = np.array((5, 0, 1))
-        self.action_space = spaces.Box(low=np.full(18, -1), high=np.full(18, 1), dtype=np.float32)
+        self.action_space = spaces.Box(low=np.full(12, -1), high=np.full(12, 1), dtype=np.float32)
         self.observation_space = spaces.Box(low=np.full(6, -180), high=np.full(6, 180),
                                              dtype=np.float64)
         # TODO: Normalise the observation
         self.r = Robit([0, 0, 0, 1])  # initialise the Robot
+        self.rwd = 0
         self.distOld = 5
         self.reachedDist = 0
         self.success = 0
@@ -66,29 +68,30 @@ class Envr(gym.Env):
         done = False
         if pos[0] > self.target[0]:
             self.reachedDist += 1
-            rwd = 2
+            self.rwd += 2
             done = True
         if dist < self.distOld:
             self.distOld = dist
             self.gotCloser += 1
-            rwd = 3
+            self.rwd += 3
             if dist < 2:
                 self.success += 1
-                rwd = 4
+                self.rwd += 4
                 done = True
         else:
-            rwd = 0
+            self.rwd = 0
         if -30 < observation[0] > 30 or -30 < observation[1] > 30 or -30 < observation[2] > 30:
             self.failed += 1
-            rwd -= 0
+            self.rwd = 0
         if -60 < observation[0] > 60 or -60 < observation[1] > 60 or pos[0] > 6 or pos[0] > 6:
-            rwd = 0
+            self.rwd = 0
             done = True
         info = {'info': 'wer das hier liest ist doof'}
         return observation, rwd, done, info
 
-    def reset(self, *, seed: [int] = None, options: [dict] = None):
+    def reset(self, *, seed = None, options = None):
         self.log()
+        self.rwd = 0
         self.distOld = 5
         self.reachedDist = 0
         self.success = 0
@@ -112,11 +115,11 @@ class Envr(gym.Env):
 
 
 if __name__ == "__main__":
-    env = Envr(False)
+    env = Envr(True)
     check_env(env)
 
     model = A2C("MlpPolicy", env, verbose=1)
-    model.learn(total_timesteps=10000000)
+    model.learn(total_timesteps=10000)
     model.save("KrabbelModel")
     del model
     p.disconnect()
