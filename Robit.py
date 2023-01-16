@@ -68,31 +68,53 @@ class Robit():
 
     def jointMover(self, angles):
         maxAngl = 50
-        i = 0
-        while i < 18:
-            # print(angles)
-            self.moveJoint(i, interp(angles[i], (-1, 1), (-maxAngl, maxAngl)))
-            # print(f"ang:\n {angles},i: {i}")
-            i += 1
+        moveTimeOut = 0
+        anglRad = interp(angles[:], (-1, 1), (-maxAngl, maxAngl))
+
+        self.rot0R(angle=anglRad[0])
+        self.hub0R(angle=anglRad[1])
+        self.rot0L(angle=anglRad[2])
+        self.hub0L(angle=anglRad[3])
+        self.rot1R(angle=anglRad[4])
+        self.hub1R(angle=anglRad[5])
+        self.rot1L(angle=anglRad[6])
+        self.hub1L(angle=anglRad[7])
+        self.rot2R(angle=anglRad[8])
+        self.hub2R(angle=anglRad[9])
+        self.rot2L(angle=anglRad[10])
+        self.hub2L(angle=anglRad[11])
 
         def isreached():
-            out = False
-            i = 0
-            while i < 18:
-                a = p.getJointState(self.selfIdRobit, i)[0]
-                b = interp(angles[i], (-1, 1), (-maxAngl*math.pi/180, maxAngl*math.pi/180))
-                if abs(a - b) < 0.1:
-                    out = True
-                else:
-                    out = False
-                i += 1
-            return out
-        moveTimeOut = 0
+            if abs(p.getJointState(self.selfIdRobit, 0)[0] - anglRad[0]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[1] - anglRad[1]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[3] - anglRad[3]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[4] - anglRad[4]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[6] - anglRad[6]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[7] - anglRad[7]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[9] - anglRad[9]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[10] - anglRad[10]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[12] - anglRad[12]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[13] - anglRad[13]) > 0.1:
+                return False
+            if abs(p.getJointState(self.selfIdRobit, 0)[15] - anglRad[15]) > 0.1:
+                return False    
+            if abs(p.getJointState(self.selfIdRobit, 0)[16] - anglRad[16]) > 0.1:
+                return False
+            return True
+        
         while not isreached() and moveTimeOut < 2000:
             moveTimeOut += 1
             p.stepSimulation()
 
-        # TODO: Warten bis alle joints ihre position eingenommen haben
 
     def moveRots(self, angle):
         self.moveJoint(0, angle=angle)

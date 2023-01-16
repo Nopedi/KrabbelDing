@@ -26,17 +26,9 @@ class Envr(gym.Env):
     with open('log.csv', 'w') as f:
         f.write(f"Got Closer ; Reached dist ; success ; failed\n")
 
-    p.connect(p.GUI)
-    p.setAdditionalSearchPath(pybullet_data.getDataPath())
-
-    gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
-    target = p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
-    p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
-    p.changeDynamics(gorundPlane, -1, lateralFriction=2)
-    p.setGravity(0, 0, -10)
-
-    def __init__(self):
+    def __init__(self, render=False):
         super().__init__()
+        self.rendering(render)
         self.target = np.array((5, 0, 1))
         self.action_space = spaces.Box(low=np.full(18, -1), high=np.full(18, 1), dtype=np.float32)
         self.observation_space = spaces.Box(low=np.full(6, -180), high=np.full(6, 180),
@@ -49,6 +41,19 @@ class Envr(gym.Env):
         self.failed = 0
         self.gotCloser = 0
 
+    def rendering(self, gui):
+        if gui:
+            p.connect(p.GUI)
+        else:
+            p.connect(p.DIRECT)
+
+        p.setAdditionalSearchPath(pybullet_data.getDataPath())
+        gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
+        target = p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
+        p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
+        p.changeDynamics(gorundPlane, -1, lateralFriction=2)
+        p.setGravity(0, 0, -10)
+
     def step(self, action):
         p.stepSimulation()
         self.r.jointMover(action)
@@ -57,27 +62,27 @@ class Envr(gym.Env):
         rot = self.r.getRotationXYZ()
         input = (rot[0], rot[1], rot[2], pos[0]-targetpos[0], pos[1]-targetpos[1], pos[2]-targetpos[2])
         observation = np.array(input).astype(np.float64)
-        rwd = -1
+        rwd = 0
         done = False
         if pos[0] > self.target[0]:
             self.reachedDist += 1
-            rwd = 100
+            rwd = 2
             done = True
         if dist < self.distOld:
             self.distOld = dist
             self.gotCloser += 1
-            rwd = 1
+            rwd = 3
             if dist < 2:
                 self.success += 1
-                rwd = 1000
+                rwd = 4
                 done = True
         else:
-            rwd = -50
+            rwd = 0
         if -30 < observation[0] > 30 or -30 < observation[1] > 30 or -30 < observation[2] > 30:
             self.failed += 1
-            rwd -= 100
+            rwd -= 0
         if -60 < observation[0] > 60 or -60 < observation[1] > 60 or pos[0] > 6 or pos[0] > 6:
-            rwd = -1000
+            rwd = 0
             done = True
         info = {'info': 'wer das hier liest ist doof'}
         return observation, rwd, done, info
@@ -105,34 +110,35 @@ class Envr(gym.Env):
         with open('log.csv', 'a', newline='') as f:
             f.write(f"{self.gotCloser}; {self.reachedDist}; {self.success}; {self.failed}\n")
 
+
 if __name__ == "__main__":
-    env = Envr()
+    env = Envr(False)
     check_env(env)
 
     model = A2C("MlpPolicy", env, verbose=1)
-    model.learn(total_timesteps=100)
+    model.learn(total_timesteps=10000000)
     model.save("KrabbelModel")
     del model
     p.disconnect()
 
 
-    p.connect(p.GUI)
-    gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
-    p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
-    p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
-    p.changeDynamics(gorundPlane, -1, lateralFriction=2)
-    p.setGravity(0, 0, -10)
-
-    env = Envr()
-    model = A2C.load("KrabbelModel")
-    obs = env.reset()
-
-    qKey = ord('q')
-    mKey = ord('m')
-
-    for i in range(1000):
-        action, _state = model.predict(obs, deterministic=True)
-        obs, reward, done, info = env.step(action)
+    # p.connect(p.GUI)
+    # gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
+    # p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
+    # p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
+    # p.changeDynamics(gorundPlane, -1, lateralFriction=2)
+    # p.setGravity(0, 0, -10)
+    #
+    # env = Envr()
+    # model = A2C.load("KrabbelModel")
+    # obs = env.reset()
+    #
+    # qKey = ord('q')
+    # mKey = ord('m')
+    #
+    # for i in range(1000):
+    #     action, _state = model.predict(obs, deterministic=True)
+    #     obs, reward, done, info = env.step(action)
 
 
 
