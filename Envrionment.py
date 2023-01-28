@@ -1,4 +1,3 @@
-
 import gym as gym
 import numpy as np
 from gym import spaces
@@ -8,15 +7,9 @@ import pybullet as p
 import pybullet_data
 
 
-from stable_baselines3 import A2C
-from stable_baselines3.common.env_util import make_vec_env
-
-from stable_baselines3.common.env_checker import check_env
-
-
 # p.setRealTimeSimulation(1)
 targetpos = np.array((5, 0, 1))
-
+MAX_EP_LEN = 50
 
 def getDist(array):
     return np.sqrt(sum(array[:]**2))
@@ -36,12 +29,13 @@ class Envr(gym.Env):
                                              dtype=np.float64)
         # TODO: Normalise the observation
         self.r = Robit([0, 0, 0, 1])  # initialise the Robot
-        self.rwd = 0
         self.distOld = 5
         self.reachedDist = 0
         self.success = 0
         self.failed = 0
         self.gotCloser = 0
+        self.resetString = ""
+        self.timer = 0
 
     def rendering(self, gui):
         if gui:
@@ -53,11 +47,12 @@ class Envr(gym.Env):
         gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
         target = p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
         p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
-        p.changeDynamics(gorundPlane, -1, lateralFriction=2)
+        p.changeDynamics(gorundPlane, -1, lateralFriction=1)
         p.setGravity(0, 0, -10)
 
     def step(self, action):
-        p.stepSimulation()
+        print(action)
+        self.timer += 1
         self.r.jointMover(action)
         dist = getDist(self.target - self.r.getPosition())
         pos = self.r.getPosition()
@@ -66,32 +61,36 @@ class Envr(gym.Env):
         observation = np.array(input).astype(np.float64)
         rwd = 0
         done = False
+        self.resetString = "Timeout"
+        rwd = 1/(dist)
         if pos[0] > self.target[0]:
-            self.reachedDist += 1
-            self.rwd += 2
+            rwd = 5
+            self.resetString = "Further than Target"
+            #print(self.resetString)
             done = True
-        if dist < self.distOld:
-            self.distOld = dist
-            self.gotCloser += 1
-            self.rwd += 3
-            if dist < 2:
-                self.success += 1
-                self.rwd += 4
-                done = True
-        else:
-            self.rwd = 0
-        if -30 < observation[0] > 30 or -30 < observation[1] > 30 or -30 < observation[2] > 30:
-            self.failed += 1
-            self.rwd = 0
-        if -60 < observation[0] > 60 or -60 < observation[1] > 60 or pos[0] > 6 or pos[0] > 6:
-            self.rwd = 0
+        if dist < 1:
+            self.success += 1
+            rwd = 10
             done = True
-        info = {'info': 'wer das hier liest ist doof'}
+            self.resetString = "Goal Reached"
+            print(self.resetString)
+        if -80 < observation[0] > 80 or -80 < observation[1] > 80 or pos[0] > 7:
+            rwd = 0
+            done = True
+            self.resetString = "Crashed"
+            #print(self.resetString)
+        info = {'rwd': rwd, 'Timer' : self.timer}
+        if self.timer >= MAX_EP_LEN:
+            rwd = 0
+            done = True
+        print(info, end="\r")
+        
         return observation, rwd, done, info
 
     def reset(self, *, seed = None, options = None):
         self.log()
-        self.rwd = 0
+        print(f"\nReset: {self.resetString}")
+        self.timer = 0
         self.distOld = 5
         self.reachedDist = 0
         self.success = 0
@@ -116,32 +115,7 @@ class Envr(gym.Env):
 
 if __name__ == "__main__":
     env = Envr(True)
-    check_env(env)
-
-    model = A2C("MlpPolicy", env, verbose=1)
-    model.learn(total_timesteps=10000)
-    model.save("KrabbelModel")
-    del model
-    p.disconnect()
-
-
-    # p.connect(p.GUI)
-    # gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
-    # p.loadURDF("target.urdf", targetpos, [0, 0, 0, 1])
-    # p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=[0, 0, 1])
-    # p.changeDynamics(gorundPlane, -1, lateralFriction=2)
-    # p.setGravity(0, 0, -10)
-    #
-    # env = Envr()
-    # model = A2C.load("KrabbelModel")
-    # obs = env.reset()
-    #
-    # qKey = ord('q')
-    # mKey = ord('m')
-    #
-    # for i in range(1000):
-    #     action, _state = model.predict(obs, deterministic=True)
-    #     obs, reward, done, info = env.step(action)
-
-
-
+    while 1:
+        obs, rwd, done, indo = env.step(env.action_space.sample())
+        if done:
+            env.reset()
