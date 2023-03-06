@@ -93,6 +93,8 @@ while p.isConnected():
     keys = p.getKeyboardEvents()
     # updateJoints()
     pos, rot = r.getOrientation()
+    a, b = r.getVel()
+    print(a)
     r.jointMover(np.full(12, 1))
     # p.resetDebugVisualizerCamera(cameraDistance=5, cameraYaw=0, cameraPitch=-30, cameraTargetPosition=pos)
     # r.plugWalk()
@@ -105,7 +107,7 @@ while p.isConnected():
     # r.step1R()
     # r.step2L()
     a = rotPerAxis(QToAxis(rot))
-    print(round(a[0], 1), round(a[1], 1), round(a[2], 1), end="\n")
+    # print(round(a[0], 1), round(a[1], 1), round(a[2], 1), end="\n")
 
     if qKey in keys:
         print(f"Sim stopped by 'q'({qKey}) press")
