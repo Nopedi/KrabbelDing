@@ -1,4 +1,5 @@
 .venv/
+logs
 .idea/CodeTests.iml
 .idea/misc.xml
 .idea/modules.xml

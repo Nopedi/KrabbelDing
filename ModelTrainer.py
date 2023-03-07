@@ -8,7 +8,7 @@ import os
 # env = make_vec_env(RobitEnvironment, n_envs=1)
 MODEL_NAME = "KrabbelDest-v1"
 LEARING_TIMESTEPS = 200_000
-env = RobitEnvironment(False)
+env = RobitEnvironment(gui=False)
 
 logdir = "logs"
 if not os.path.exists(logdir):
@@ -19,7 +19,8 @@ model = alg("MultiInputPolicy",
             learning_rate=0.006,
             # ent_coef="auto_0.1",
             train_freq=(1, 'step'),
-            learning_starts=1000,
+            policy_kwargs = dict(net_arch = [500, 250, 500]),        
+            learning_starts=100,
             verbose=2,
             tensorboard_log=logdir)
 
