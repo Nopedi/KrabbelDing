@@ -34,7 +34,7 @@ class Robit():
         self.selfIdRobit = p.loadURDF("Robit.urdf", [0, 0, 1.5], quaternion)
         p.changeDynamics(self.selfIdRobit, -1, lateralFriction=10)
         self.speed = 50
-        self.maxVal = .5
+        self.maxVal = .3
         self.queternion = quaternion
 
     def start(self):
