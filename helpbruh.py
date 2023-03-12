@@ -3,7 +3,7 @@ from stable_baselines3 import SAC as alg
 from stable_baselines3.common.env_util import make_vec_env
  
 env = RobitEnvironment(True)
-MODEL_NAME = "KrabbelDest-v1-6h"
+MODEL_NAME = "KrabbelTest004"
 model = alg.load(MODEL_NAME)
 obs = env.reset()
 i = 0

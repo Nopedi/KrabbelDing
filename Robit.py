@@ -34,7 +34,7 @@ class Robit():
         self.selfIdRobit = p.loadURDF("Robit.urdf", [0, 0, 1.5], quaternion)
         p.changeDynamics(self.selfIdRobit, -1, lateralFriction=10)
         self.speed = 50
-        self.maxVal = 0.1
+        self.maxVal = .5
         self.queternion = quaternion
 
     def start(self):
@@ -87,7 +87,7 @@ class Robit():
         self.hub2L(angle=anglRad[11])
 
         def isreached():
-            default_max_diff = 0.3
+            default_max_diff = 0.2
             if abs(p.getJointState(self.selfIdRobit, 0)[0] - anglRad[0]) > default_max_diff:
                 # print(f"joint {0} has not reached its target {diff}")  
                 return False
@@ -128,7 +128,7 @@ class Robit():
         
         while not isreached():
             moveTimeOut += 1
-            if  moveTimeOut > 1000:
+            if  moveTimeOut > 400:
                 # print(
                 #     np.array([
                 #         p.getJointState(self.selfIdRobit, 0)[0],

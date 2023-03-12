@@ -33,14 +33,15 @@ class RobitEnvironment(gym.Env):
         self.timer = 0
     
     def _setup(self, gui):
-        self.robit = Robit([0, 0, 0, 1])  # initialise the Robot
         gorundPlane = p.loadURDF("plane.urdf", [0, 0, 0], [0, 0, 0, 1])
+        self.robit = Robit()  # initialise the Robot
         p.changeDynamics(gorundPlane, -1, lateralFriction=1)
         p.setGravity(0, 0, -10)
     
     def _get_new_rdm_target_pos(self):
+        DISTANCE = 5
         angl = np.random.randint(0, 360)
-        return np.array((np.cos(angl*np.pi/180) * 5, np.sin(angl*np.pi/180) * 5, 1))
+        return np.array((np.cos(angl*np.pi/180) * DISTANCE, np.sin(angl*np.pi/180) * DISTANCE, 1))
         
     def _get_dist(self):
         return np.sqrt(sum((self.TARGET_POSITION - self.robit.getPosition())[:]**2))
@@ -61,14 +62,18 @@ class RobitEnvironment(gym.Env):
         self.timer += 1
         self.robit.jointMover(action)
         dist = self._get_dist()
-        rwd = 1/(dist)
+        rwd = (10/(dist)-10)
         rotation = self.robit.getRotationXYZ()
         if abs(rotation[0]) > 60 or abs(rotation[1]) > 60:
-            rwd = 0
+            rwd = -100
+            done = True
+        if dist < 1:
+            rwd = 100
             done = True
         if self.timer >= 50:
             done = True
-        # print(dist, end="\r")
+        # print(rwd)
+        
         return self._get_obs(), rwd, done, {}
     
     def close(self):
@@ -97,8 +102,20 @@ if __name__ == "__main__":
     env = RobitEnvironment(True)
     print(env.observation_space.sample())
     check_env(env)
-    while 1:
-        obs, rwd, done, indo = env.step(env.action_space.sample())
-        if done:
-            env.reset()
+    step1 = np.array((1,-1,-1,1,-1,1,1,-1,1,-1,-1,1))
+    step2 = np.array((-1,-1,1,1,1,1,-1,-1,-1,-1,1,1))
+    step3 = step1 * -1
+    step4 = step2 * -1
+    
+    for _ in range(100):    
+        obs, rwd, done, indo = env.step(step1)
+        obs, rwd, done, indo = env.step(step2)
+        obs, rwd, done, indo = env.step(step3)
+        obs, rwd, done, indo = env.step(step4)
+        print(done)
+
+    # while 1:
+    #     obs, rwd, done, indo = env.step(env.action_space.sample())
+    #     if done:
+    #         env.reset()
     
