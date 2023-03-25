@@ -3,26 +3,34 @@
 from RobitEnv2 import RobitEnvironment
 from stable_baselines3 import SAC as alg
 from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.callbacks import EvalCallback, StopTrainingOnNoModelImprovement
+from stable_baselines3.common.noise import NormalActionNoise
 import os
+import numpy as np
 
-# env = make_vec_env(RobitEnvironment, n_envs=1)
-MODEL_NAME = "KrabbelTest005"
-LEARING_TIMESTEPS = 100_000
-env = RobitEnvironment(gui=False)
+env = RobitEnvironment(gui=True)
+
+stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=30, min_evals=5, verbose=1)
+eval_callback = EvalCallback(env, eval_freq=5000, callback_after_eval=stop_train_callback, verbose=1)
+
+MODEL_NAME = "KrabbelTest006"
+LEARING_TIMESTEPS = 20_000
 
 logdir = "logs"
 if not os.path.exists(logdir):
     os.makedirs(logdir)
-    
+
+n_actions = env.action_space.shape[-1]
+action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma= .1 * np.ones(n_actions))
 model = alg("MultiInputPolicy",
             env,
             # learning_rate=0.0015,
-            ent_coef="auto_0.1",
-            train_freq=(1, 'episode'),
-            policy_kwargs = dict(net_arch = [400, 300, 200]),        
-            learning_starts=2000,
-            verbose=2,
+            # ent_coef=0.001,
+            train_freq=(1, 'step'),
+            policy_kwargs = dict(net_arch = [128]),        
+            learning_starts=1000,
+            verbose=1,
             tensorboard_log=logdir)
 
-model.learn(total_timesteps=LEARING_TIMESTEPS, progress_bar=True)
+model.learn(total_timesteps=LEARING_TIMESTEPS, callback=eval_callback, progress_bar=True)
 model.save(MODEL_NAME)

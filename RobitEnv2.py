@@ -62,7 +62,7 @@ class RobitEnvironment(gym.Env):
         self.timer += 1
         self.robit.jointMover(action)
         dist = self._get_dist()
-        rwd = (10/(dist)-2)
+        rwd = -dist
         rotation = self.robit.getRotationXYZ()
         if abs(rotation[0]) > 60 or abs(rotation[1]) > 60:
             rwd = -100
@@ -70,14 +70,14 @@ class RobitEnvironment(gym.Env):
         if dist < 1:
             rwd = 100
             done = True
-        if self.timer >= 500:
+        if self.timer >= 50:
             done = True
         # print(rwd)
         
         return self._get_obs(), rwd, done, {}
     
     def close(self):
-        p.disconnect()
+        # p.disconnect()
         return super().close()
     
     def _get_obs(self):
