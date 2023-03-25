@@ -36,7 +36,7 @@ DEFAULT_HYPERPARAMS = {
 def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
     """Sampler for SAC hyperparameters."""
     seed = trial.suggest_int("seed", 1, 10000, log=True)
-    # gamma = 1.0 - trial.suggest_float("gamma", 0.0001, 0.1, log=True)
+    gamma = 1.0 - trial.suggest_float("gamma", 0.0001, 0.1, log=True)
     learning_rate = trial.suggest_float("lr", 1e-5, 1, log=True)
     buffer_size = trial.suggest_int("buffer_size", 10000, 1e5, log=True)
     batch_size = trial.suggest_int("batch_size", 64, 2048, log=True)
@@ -45,7 +45,7 @@ def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
     activation_fn = trial.suggest_categorical("activation_fn", ["tanh", "relu"])
 
     # Display true values.
-    # trial.set_user_attr("gamma_", gamma)
+    trial.set_user_attr("gamma_", gamma)
 
     #change this
     if net_arch == "tiny":
@@ -62,7 +62,7 @@ def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
     activation_fn = {"tanh": nn.Tanh, "relu": nn.ReLU}[activation_fn]
 
     return {
-        # "gamma": gamma,
+        "gamma": gamma,
         "seed": seed,
         "learning_rate": learning_rate,
         "ent_coef": "auto_0.1",
