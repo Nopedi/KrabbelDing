@@ -38,9 +38,9 @@ def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
     seed = trial.suggest_int("seed", 1, 10000, log=True)
     # gamma = 1.0 - trial.suggest_float("gamma", 0.0001, 0.1, log=True)
     learning_rate = trial.suggest_float("lr", 1e-5, 1, log=True)
-    # buffer_size = trial.suggest_int("buffer_size", 10000, 1e5, log=True)
-    # batch_size = trial.suggest_int("batch_size", 64, 2048, log=True)
-    ent_coef = trial.suggest_float("ent_coef", 0.00001, 0.1, log=True)
+    buffer_size = trial.suggest_int("buffer_size", 10000, 1e5, log=True)
+    batch_size = trial.suggest_int("batch_size", 64, 2048, log=True)
+    # ent_coef = trial.suggest_float("ent_coef", 0.00001, 0.1, log=True)
     net_arch = trial.suggest_categorical("net_arch", ["tiny", "small", "rasonable", "default"])
     activation_fn = trial.suggest_categorical("activation_fn", ["tanh", "relu"])
 
@@ -66,8 +66,8 @@ def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
         "seed": seed,
         "learning_rate": learning_rate,
         "ent_coef": "auto_0.1",
-        #"batch_size": batch_size,
-        #"buffer_size": buffer_size,
+        "batch_size": batch_size,
+        "buffer_size": buffer_size,
         "policy_kwargs": {
             "activation_fn": activation_fn,
             "net_arch": net_arch
