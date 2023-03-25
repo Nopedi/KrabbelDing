@@ -22,7 +22,8 @@ model = alg("MultiInputPolicy",
             policy_kwargs = dict(net_arch = [500, 250, 500]),        
             learning_starts=100,
             verbose=2,
-            tensorboard_log=logdir)
+            # tensorboard_log=logdir
+            )
 
 model.learn(total_timesteps=LEARING_TIMESTEPS, progress_bar=True)
 model.save(MODEL_NAME)
