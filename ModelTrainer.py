@@ -24,11 +24,6 @@ n_actions = env.action_space.shape[-1]
 action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma= .1 * np.ones(n_actions))
 model = alg("MultiInputPolicy",
             env,
-            # learning_rate=0.0015,
-            # ent_coef=0.001,
-            train_freq=(1, 'step'),
-            policy_kwargs = dict(net_arch = [128]),        
-            learning_starts=1000,
             verbose=1,
             tensorboard_log=logdir)
 

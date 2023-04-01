@@ -15,10 +15,10 @@ from RobitEnv2 import RobitEnvironment
 from stable_baselines3.common.evaluation import evaluate_policy
 
 
-N_TRIALS = 10
+N_TRIALS = 50
 N_STARTUP_TRIALS = 5
 N_EVALUATIONS = 2
-N_TIMESTEPS = int(2e4)
+N_TIMESTEPS = int(1e4)
 EVAL_FREQ = int(N_TIMESTEPS / N_EVALUATIONS)
 N_EVAL_EPISODES = 3
 model_dir = f"opt_models/SAC"
@@ -36,8 +36,8 @@ DEFAULT_HYPERPARAMS = {
 def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
     """Sampler for SAC hyperparameters."""
     seed = trial.suggest_int("seed", 1, 10000, log=True)
-    gamma = 1.0 - trial.suggest_float("gamma", 0.0001, 0.1, log=True)
-    learning_rate = trial.suggest_float("lr", 1e-5, 1, log=True)
+    gamma = trial.suggest_float("gamma", (1-0.1), (1-0.0001), log=True)
+    learning_rate = trial.suggest_float("lr", 1e-5, 0.01, log=True)
     buffer_size = trial.suggest_int("buffer_size", 10000, 1e5, log=True)
     batch_size = trial.suggest_int("batch_size", 64, 2048, log=True)
     # ent_coef = trial.suggest_float("ent_coef", 0.00001, 0.1, log=True)
@@ -45,7 +45,7 @@ def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
     activation_fn = trial.suggest_categorical("activation_fn", ["tanh", "relu"])
 
     # Display true values.
-    trial.set_user_attr("gamma_", gamma)
+    # trial.set_user_attr("gamma_", gamma)
 
     #change this
     if net_arch == "tiny":
@@ -60,6 +60,9 @@ def sample_SAC_params(trial: optuna.Trial) -> Dict[str, Any]:
          net_arch = [512, 512, 512]
 
     activation_fn = {"tanh": nn.Tanh, "relu": nn.ReLU}[activation_fn]
+
+    trial.set_user_attr("net_arch_", net_arch)
+    trial.set_user_attr("activation_fn_", activation_fn)
 
     return {
         "gamma": gamma,

@@ -59,22 +59,32 @@ class RobitEnvironment(gym.Env):
     def step(self, action):
         # print(action)
         done = False
+        fall = False
+        goal_reached = False
+        timeout = False
         self.timer += 1
         self.robit.jointMover(action)
         dist = self._get_dist()
-        rwd = -dist
+        if dist != 0:
+            rwd = (1/dist-0.2) * 10
+        else:
+            rwd = 0
         rotation = self.robit.getRotationXYZ()
         if abs(rotation[0]) > 60 or abs(rotation[1]) > 60:
-            rwd = -100
+            rwd = -1000
+            fall = True
             done = True
         if dist < 1:
             rwd = 100
+            goal_reached = True
             done = True
-        if self.timer >= 50:
+        if self.timer >= 20:
             done = True
+            timeout = True
+ 
         # print(rwd)
-        
-        return self._get_obs(), rwd, done, {}
+        info = {"time": self.timer, "done":done, "timeout": timeout , "fall": fall, "goal_reached": goal_reached, "dist": dist, "rwd": rwd}
+        return self._get_obs(), rwd, done, info
     
     def close(self):
         # p.disconnect()
@@ -109,11 +119,14 @@ if __name__ == "__main__":
     step4 = step2 * -1
     
     for _ in range(100):    
-        obs, rwd, done, indo = env.step(step1)
-        obs, rwd, done, indo = env.step(step2)
-        obs, rwd, done, indo = env.step(step3)
-        obs, rwd, done, indo = env.step(step4)
-        print(rwd,done)
+        obs, rwd, done, info = env.step(step1)
+        print(info)
+        obs, rwd, done, info = env.step(step2)
+        print(info)
+        obs, rwd, done, info = env.step(step3)
+        print(info)
+        obs, rwd, done, info = env.step(step4)
+        print(info)
 
     # while 1:
     #     obs, rwd, done, indo = env.step(env.action_space.sample())
