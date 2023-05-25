@@ -16,7 +16,7 @@ env = make_vec_env(RobitEnvironment, n_envs=4)
 stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=5, min_evals=5, verbose=1)
 eval_callback = EvalCallback(env, eval_freq=5000, callback_after_eval=stop_train_callback, verbose=1)
 
-MODEL_NAME = "KrabbelTest007"
+MODEL_NAME = "KrabbelTest009"
 LEARING_TIMESTEPS = 1_000_000
 USE_OLD_MODEL = False
 logdir = "logs"
