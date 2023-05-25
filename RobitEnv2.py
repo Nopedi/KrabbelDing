@@ -40,8 +40,8 @@ class RobitEnvironment(gym.Env):
         p.setGravity(0, 0, -10)
     
     def _get_new_rdm_target_pos(self):
-        DISTANCE = 4
-        angl = np.random.randint(-30, 30)
+        DISTANCE = np.random.randint(3, 10)
+        angl = np.random.randint(-60, 60)
         return np.array((np.cos(angl*np.pi/180) * DISTANCE, np.sin(angl*np.pi/180) * DISTANCE, 1))
         
     def _get_dist(self):
@@ -67,7 +67,7 @@ class RobitEnvironment(gym.Env):
         self.robit.jointMover(action)
         dist = self._get_dist()
         if dist != 0:
-            rwd = (1/dist-0.2) * 1
+            rwd = -dist * .5
         else:
             rwd = 0
         rotation = self.robit.getRotationXYZ()
