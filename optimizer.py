@@ -23,7 +23,7 @@ EVAL_FREQ = int(N_TIMESTEPS / N_EVALUATIONS)
 N_EVAL_EPISODES = 3
 model_dir = f"opt_models/SAC"
 
-ENV_ID = RobitEnvironment()
+ENV_ID = RobitEnvironment(False)
 
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
@@ -114,7 +114,7 @@ class TrialEvalCallback(EvalCallback):
         return True
     
     def _on_training_end(self) -> None:
-        self.model.save(f"{model_dir}/SAC_Model_{self.best_mean_reward}")
+        self.model.save(f"{model_dir}/SAC_Model_{self.last_mean_reward}")
         return super()._on_training_end()
 
     

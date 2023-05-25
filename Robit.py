@@ -85,49 +85,64 @@ class Robit():
         self.hub2R(angle=anglRad[9])
         self.rot2L(angle=anglRad[10])
         self.hub2L(angle=anglRad[11])
-
+        
         def isreached():
             default_max_diff = 0.2
-            if abs(p.getJointState(self.selfIdRobit, 0)[0] - anglRad[0]) > default_max_diff:
+            joint_state = p.getJointState(self.selfIdRobit, 0)[0]
+            if abs(joint_state - anglRad[0]) > default_max_diff:
                 # print(f"joint {0} has not reached its target {diff}")  
                 return False
-            if abs(-p.getJointState(self.selfIdRobit, 1)[0] - anglRad[1]) > default_max_diff:
+            joint_state = -p.getJointState(self.selfIdRobit, 1)[0]
+            if abs(joint_state - anglRad[1]) > default_max_diff:
                 # print(f"joint {1} has not reached its target {diff}")  
                 return False
-            if abs(-p.getJointState(self.selfIdRobit, 3)[0] - anglRad[2]) > default_max_diff:
+            joint_state = -p.getJointState(self.selfIdRobit, 3)[0]
+            if abs(joint_state - anglRad[2]) > default_max_diff:
                 # print(f"joint {3} has not reached its target {diff}")  
                 return False
-            if abs(p.getJointState(self.selfIdRobit, 4)[0] - anglRad[3]) > default_max_diff:
+            joint_state = p.getJointState(self.selfIdRobit, 4)[0]
+            if abs(joint_state - anglRad[3]) > default_max_diff:
                 # print(f"joint {4} has not reached its target")
                 return False
-            if abs(p.getJointState(self.selfIdRobit, 6)[0] - anglRad[4]) > default_max_diff:
+            joint_state = p.getJointState(self.selfIdRobit, 6)[0]
+            if abs(joint_state - anglRad[4]) > default_max_diff:
                 # print(f"joint {6} has not reached its target")
                 return False
-            if abs(-p.getJointState(self.selfIdRobit, 7)[0] - anglRad[5]) > default_max_diff:
+            joint_state = -p.getJointState(self.selfIdRobit, 7)[0]
+            if abs(joint_state - anglRad[5]) > default_max_diff:
                 # print(f"joint {7} has not reached its target")
                 return False
-            if abs(-p.getJointState(self.selfIdRobit, 9)[0] - anglRad[6]) > default_max_diff:
+            joint_state = -p.getJointState(self.selfIdRobit, 9)[0]
+            if abs(joint_state - anglRad[6]) > default_max_diff:
                 # print(f"joint {9} has not reached its target")
                 return False
-            if abs(p.getJointState(self.selfIdRobit, 10)[0] - anglRad[7]) > default_max_diff:
+            joint_state = p.getJointState(self.selfIdRobit, 10)[0]
+            if abs(joint_state - anglRad[7]) > default_max_diff:
                 # print(f"joint {10} has not reached its target")
                 return False
-            if abs(p.getJointState(self.selfIdRobit, 12)[0] - anglRad[8]) > default_max_diff:
+            joint_state = p.getJointState(self.selfIdRobit, 12)[0]
+            if abs(joint_state - anglRad[8]) > default_max_diff:
                 # print(f"joint {12} has not reached its target")
                 return False
-            if abs(-p.getJointState(self.selfIdRobit, 13)[0] - anglRad[9]) > default_max_diff:
+            joint_state = -p.getJointState(self.selfIdRobit, 13)[0]
+            if abs(joint_state - anglRad[9]) > default_max_diff:
                 # print(f"joint {13} has not reached its target")
                 return False
-            if abs(-p.getJointState(self.selfIdRobit, 15)[0] - anglRad[10]) > default_max_diff:
+            joint_state = -p.getJointState(self.selfIdRobit, 15)[0]
+            if abs(joint_state - anglRad[10]) > default_max_diff:
                 # print(f"joint {15} has not reached its target")
-                return False    
-            if abs(p.getJointState(self.selfIdRobit, 16)[0] - anglRad[11]) > default_max_diff:
+                return False
+            joint_state = p.getJointState(self.selfIdRobit, 16)[0]
+            if abs(joint_state - anglRad[11]) > default_max_diff:
                 # print(f"joint {16} has not reached its target")
                 return False
             return True
         
+        p.stepSimulation()
+        
         while not isreached():
             moveTimeOut += 1
+            p.stepSimulation()
             if  moveTimeOut > 400:
                 # print(
                 #     np.array([
@@ -146,7 +161,6 @@ class Robit():
                 #     )
                 # print(anglRad)
                 break
-            p.stepSimulation()
             
     def get_joint_angles(self):
         joint_angels = (p.getJointState(self.selfIdRobit, 0)[0],

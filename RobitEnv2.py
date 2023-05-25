@@ -7,6 +7,7 @@ from Robit import Robit
 import pybullet as p
 import pybullet_data
 
+TIMEOUT = 200
 
 class RobitEnvironment(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -39,7 +40,7 @@ class RobitEnvironment(gym.Env):
         p.setGravity(0, 0, -10)
     
     def _get_new_rdm_target_pos(self):
-        DISTANCE = 5
+        DISTANCE = 4
         angl = np.random.randint(-30, 30)
         return np.array((np.cos(angl*np.pi/180) * DISTANCE, np.sin(angl*np.pi/180) * DISTANCE, 1))
         
@@ -66,19 +67,20 @@ class RobitEnvironment(gym.Env):
         self.robit.jointMover(action)
         dist = self._get_dist()
         if dist != 0:
-            rwd = (1/dist-0.2) * 10
+            rwd = (1/dist-0.2) * 1
         else:
             rwd = 0
         rotation = self.robit.getRotationXYZ()
         if abs(rotation[0]) > 60 or abs(rotation[1]) > 60:
-            rwd = -1000
+            rwd = -10
             fall = True
             done = True
         if dist < 1:
             rwd = 100
+            print("goal reached")
             goal_reached = True
             done = True
-        if self.timer >= 20:
+        if self.timer >= TIMEOUT:
             done = True
             timeout = True
  
