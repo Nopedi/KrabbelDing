@@ -7,7 +7,7 @@ from Robit import Robit
 import pybullet as p
 import pybullet_data
 
-TIMEOUT = 8000
+TIMEOUT = 200
 
 class RobitEnvironment(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -66,7 +66,7 @@ class RobitEnvironment(gym.Env):
         self.timer += 1
         self.robit.jointMover(action)
         dist = self._get_dist()
-        rwd = 1/(dist*0.1)
+        rwd = (1/(dist)-1/self.DISTANCE) # *0.99**self.timer
         # if dist != 0:
         #     rwd = -dist * .5
         # else:
@@ -76,7 +76,7 @@ class RobitEnvironment(gym.Env):
             rwd = -50
             fall = True
             done = True
-        if dist < 1:
+        if dist < 1.5:
             rwd = 100
             print("goal reached")
             goal_reached = True

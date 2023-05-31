@@ -67,6 +67,12 @@ class Robit():
                                 maxVelocity=self.maxVal,
                                 force=maxForce)
 
+    def jointMoverTwo(self, angles):
+        maxAngl = 30 * math.pi/180  # 30 Grad in radians = 0.523599 rad
+        moveTimeOut = 0
+        anglRad = interp(angles[:], (-1, 1), (-maxAngl, maxAngl))
+        
+    
     def jointMover(self, angles):
         maxAngl = 30 * math.pi/180  # 30 Grad in radians = 0.523599 rad
         moveTimeOut = 0
@@ -140,27 +146,27 @@ class Robit():
         
         p.stepSimulation()
         
-        # while not isreached():
-        #     moveTimeOut += 1
-        #     p.stepSimulation()
-        #     if  moveTimeOut > 400:
-        #         # print(
-        #         #     np.array([
-        #         #         p.getJointState(self.selfIdRobit, 0)[0],
-        #         #         -p.getJointState(self.selfIdRobit, 1)[0],
-        #         #         -p.getJointState(self.selfIdRobit, 3)[0],
-        #         #         p.getJointState(self.selfIdRobit, 4)[0],
-        #         #         p.getJointState(self.selfIdRobit, 6)[0],
-        #         #         -p.getJointState(self.selfIdRobit, 7)[0],
-        #         #         -p.getJointState(self.selfIdRobit, 9)[0],
-        #         #         p.getJointState(self.selfIdRobit, 10)[0],
-        #         #         p.getJointState(self.selfIdRobit, 12)[0],
-        #         #         -p.getJointState(self.selfIdRobit, 13)[0],
-        #         #         -p.getJointState(self.selfIdRobit, 15)[0],
-        #         #         p.getJointState(self.selfIdRobit, 16)[0]])
-        #         #     )
-        #         # print(anglRad)
-        #         break
+        while not isreached():
+            moveTimeOut += 1
+            p.stepSimulation()
+            if  moveTimeOut > 400:
+                # print(
+                #     np.array([
+                #         p.getJointState(self.selfIdRobit, 0)[0],
+                #         -p.getJointState(self.selfIdRobit, 1)[0],
+                #         -p.getJointState(self.selfIdRobit, 3)[0],
+                #         p.getJointState(self.selfIdRobit, 4)[0],
+                #         p.getJointState(self.selfIdRobit, 6)[0],
+                #         -p.getJointState(self.selfIdRobit, 7)[0],
+                #         -p.getJointState(self.selfIdRobit, 9)[0],
+                #         p.getJointState(self.selfIdRobit, 10)[0],
+                #         p.getJointState(self.selfIdRobit, 12)[0],
+                #         -p.getJointState(self.selfIdRobit, 13)[0],
+                #         -p.getJointState(self.selfIdRobit, 15)[0],
+                #         p.getJointState(self.selfIdRobit, 16)[0]])
+                #     )
+                # print(anglRad)
+                break
             
     def get_joint_angles(self):
         joint_angels = (p.getJointState(self.selfIdRobit, 0)[0],
