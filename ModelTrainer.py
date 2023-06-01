@@ -21,8 +21,9 @@ eval_callback = EvalCallback(env, best_model_save_path="./logs/",
                              log_path="./logs/", eval_freq=5000,
                              deterministic=True, render=False)
 
+OLD_MODEL_NAME = "KrabbelTest015"
 MODEL_NAME = "KrabbelTest016"
-LEARING_TIMESTEPS = 1_000_000
+LEARING_TIMESTEPS = 100_000
 USE_OLD_MODEL = False
 logdir = "logs"
 if not os.path.exists(logdir):
@@ -45,8 +46,8 @@ if not USE_OLD_MODEL:
                         device="auto",
                         tensorboard_log=logdir)
 else:
-    print(f"Using old Model {MODEL_NAME}")
-    model = alg.load(f"{MODEL_NAME}")
+    print(f"Using old Model {OLD_MODEL_NAME}")
+    model = alg.load(f"{OLD_MODEL_NAME}")
     model.set_env(env)
 
 model.learn(total_timesteps=LEARING_TIMESTEPS, callback=eval_callback, progress_bar=True)

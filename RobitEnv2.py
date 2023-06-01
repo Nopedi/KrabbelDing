@@ -40,9 +40,13 @@ class RobitEnvironment(gym.Env):
         p.setGravity(0, 0, -10)
     
     def _get_new_rdm_target_pos(self):
-        self.DISTANCE = np.random.randint(5, 7)
+        self.DISTANCE = np.random.randint(5, 8)
         angl = np.random.randint(-60, 60)
         return np.array((np.cos(angl*np.pi/180) * self.DISTANCE, np.sin(angl*np.pi/180) * self.DISTANCE, 1))
+    
+    def update_target_position(self, dist, angle):
+        tp = self.robit.getPosition() + np.array((np.cos(angle*np.pi/180) * dist, np.sin(angle*np.pi/180) * dist, 0))
+        self.TARGET_POSITION = np.array(tp)
         
     def _get_dist(self):
         return np.sqrt(sum((self.TARGET_POSITION - self.robit.getPosition())[:]**2))
@@ -50,8 +54,10 @@ class RobitEnvironment(gym.Env):
     def reset(self):
         # try:
         p.resetSimulation()
-        self.TARGET_POSITION = self._get_new_rdm_target_pos()
-        target = p.loadURDF("target.urdf", self.TARGET_POSITION, [0, 0, 0, 1])
+        # self.TARGET_POSITION = self._get_new_rdm_target_pos()
+        self.DISTANCE = 1
+        self.TARGET_POSITION = np.array((0,0,0.5))
+        #p.loadURDF("target.urdf", self.TARGET_POSITION, [0, 0, 0, 1])
         self._setup(self.use_gui)
         self.robit.resetRobit()
         self.timer = 0
