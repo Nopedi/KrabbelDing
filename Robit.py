@@ -4,7 +4,7 @@ import time
 import numpy as np
 from numpy import interp
 
-maxForce = 5000
+maxForce = 10000
 
 
 def axisToQ(axisAngles):
