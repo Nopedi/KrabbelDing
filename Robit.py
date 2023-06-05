@@ -36,6 +36,7 @@ class Robit():
         self.speed = 50
         self.maxVal = .3
         self.queternion = quaternion
+        
 
     def start(self):
         self.hub0R(0)
@@ -72,101 +73,58 @@ class Robit():
         moveTimeOut = 0
         anglRad = interp(angles[:], (-1, 1), (-maxAngl, maxAngl))
         
+    def stepsim(self, repetitions):
+        i = 0
+        while i < repetitions:
+            p.stepSimulation()
+            i += 1 
     
-    def jointMover(self, angles):
+    def jointMover(self, angle_scale):
         maxAngl = 30 * math.pi/180  # 30 Grad in radians = 0.523599 rad
-        moveTimeOut = 0
-        anglRad = interp(angles[:], (-1, 1), (-maxAngl, maxAngl))
+        moveTimeOut = 400
+        # anglRad = interp(angles[:], (-1, 1), (-maxAngl, maxAngl))
+        scaled_angles = maxAngl * angle_scale
         # print(anglRad)
 
-        self.rot0R(angle=anglRad[0])
-        self.hub0R(angle=anglRad[1])
-        self.rot0L(angle=anglRad[2])
-        self.hub0L(angle=anglRad[3])
-        self.rot1R(angle=anglRad[4])
-        self.hub1R(angle=anglRad[5])
-        self.rot1L(angle=anglRad[6])
-        self.hub1L(angle=anglRad[7])
-        self.rot2R(angle=anglRad[8])
-        self.hub2R(angle=anglRad[9])
-        self.rot2L(angle=anglRad[10])
-        self.hub2L(angle=anglRad[11])
+        # alle beine auf pos 1 setzen
         
-        def isreached():
-            default_max_diff = 0.2
-            joint_state = p.getJointState(self.selfIdRobit, 0)[0]
-            if abs(joint_state - anglRad[0]) > default_max_diff:
-                # print(f"joint {0} has not reached its target {diff}")  
-                return False
-            joint_state = -p.getJointState(self.selfIdRobit, 1)[0]
-            if abs(joint_state - anglRad[1]) > default_max_diff:
-                # print(f"joint {1} has not reached its target {diff}")  
-                return False
-            joint_state = -p.getJointState(self.selfIdRobit, 3)[0]
-            if abs(joint_state - anglRad[2]) > default_max_diff:
-                # print(f"joint {3} has not reached its target {diff}")  
-                return False
-            joint_state = p.getJointState(self.selfIdRobit, 4)[0]
-            if abs(joint_state - anglRad[3]) > default_max_diff:
-                # print(f"joint {4} has not reached its target")
-                return False
-            joint_state = p.getJointState(self.selfIdRobit, 6)[0]
-            if abs(joint_state - anglRad[4]) > default_max_diff:
-                # print(f"joint {6} has not reached its target")
-                return False
-            joint_state = -p.getJointState(self.selfIdRobit, 7)[0]
-            if abs(joint_state - anglRad[5]) > default_max_diff:
-                # print(f"joint {7} has not reached its target")
-                return False
-            joint_state = -p.getJointState(self.selfIdRobit, 9)[0]
-            if abs(joint_state - anglRad[6]) > default_max_diff:
-                # print(f"joint {9} has not reached its target")
-                return False
-            joint_state = p.getJointState(self.selfIdRobit, 10)[0]
-            if abs(joint_state - anglRad[7]) > default_max_diff:
-                # print(f"joint {10} has not reached its target")
-                return False
-            joint_state = p.getJointState(self.selfIdRobit, 12)[0]
-            if abs(joint_state - anglRad[8]) > default_max_diff:
-                # print(f"joint {12} has not reached its target")
-                return False
-            joint_state = -p.getJointState(self.selfIdRobit, 13)[0]
-            if abs(joint_state - anglRad[9]) > default_max_diff:
-                # print(f"joint {13} has not reached its target")
-                return False
-            joint_state = -p.getJointState(self.selfIdRobit, 15)[0]
-            if abs(joint_state - anglRad[10]) > default_max_diff:
-                # print(f"joint {15} has not reached its target")
-                return False
-            joint_state = p.getJointState(self.selfIdRobit, 16)[0]
-            if abs(joint_state - anglRad[11]) > default_max_diff:
-                # print(f"joint {16} has not reached its target")
-                return False
-            return True
+        self.hub0R(angle=scaled_angles[1])
+        self.hub0L(angle=scaled_angles[3])
+        self.hub1R(angle=scaled_angles[5])
+        self.hub1L(angle=scaled_angles[7])
+        self.hub2R(angle=scaled_angles[9])
+        self.hub2L(angle=scaled_angles[11])
         
-        p.stepSimulation()
+        self.stepsim(moveTimeOut)
+        #wait for all joints to lift
+        self.rot0R(angle=scaled_angles[0])
+        self.rot0L(angle=scaled_angles[2])
+        self.rot1R(angle=scaled_angles[4])
+        self.rot1L(angle=scaled_angles[6])
+        self.rot2R(angle=scaled_angles[8])
+        self.rot2L(angle=scaled_angles[10])
         
-        while not isreached():
-            moveTimeOut += 1
-            p.stepSimulation()
-            if  moveTimeOut > 400:
-                # print(
-                #     np.array([
-                #         p.getJointState(self.selfIdRobit, 0)[0],
-                #         -p.getJointState(self.selfIdRobit, 1)[0],
-                #         -p.getJointState(self.selfIdRobit, 3)[0],
-                #         p.getJointState(self.selfIdRobit, 4)[0],
-                #         p.getJointState(self.selfIdRobit, 6)[0],
-                #         -p.getJointState(self.selfIdRobit, 7)[0],
-                #         -p.getJointState(self.selfIdRobit, 9)[0],
-                #         p.getJointState(self.selfIdRobit, 10)[0],
-                #         p.getJointState(self.selfIdRobit, 12)[0],
-                #         -p.getJointState(self.selfIdRobit, 13)[0],
-                #         -p.getJointState(self.selfIdRobit, 15)[0],
-                #         p.getJointState(self.selfIdRobit, 16)[0]])
-                #     )
-                # print(anglRad)
-                break
+        self.stepsim(moveTimeOut)
+        #wait for all joints to rotate forwards
+        self.hub0R(angle=-scaled_angles[1])
+        self.hub0L(angle=-scaled_angles[3])
+        self.hub1R(angle=-scaled_angles[5])
+        self.hub1L(angle=-scaled_angles[7])
+        self.hub2R(angle=-scaled_angles[9])
+        self.hub2L(angle=-scaled_angles[11])
+        
+        self.stepsim(moveTimeOut)
+        #wait for all joints to lower
+        self.rot0R(angle=-scaled_angles[0])
+        self.rot0L(angle=-scaled_angles[2])
+        self.rot1R(angle=-scaled_angles[4])
+        self.rot1L(angle=-scaled_angles[6])
+        self.rot2R(angle=-scaled_angles[8])
+        self.rot2L(angle=-scaled_angles[10])
+        
+        self.stepsim(moveTimeOut)
+        #wait for all joints to rotate backwards
+        
             
     def get_joint_angles(self):
         joint_angels = (p.getJointState(self.selfIdRobit, 0)[0],

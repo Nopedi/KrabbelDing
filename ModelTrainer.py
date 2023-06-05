@@ -9,9 +9,9 @@ import os
 import torch as th
 import numpy as np
 
-env = RobitEnvironment(gui=True)
+# env = RobitEnvironment(gui=True)
 
-#env = make_vec_env(RobitEnvironment, n_envs=1)
+env = make_vec_env(RobitEnvironment, n_envs=1)
 
 # stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=5, min_evals=10, verbose=1)
 # eval_callback = EvalCallback(env, eval_freq=10000, callback_after_eval=stop_train_callback, verbose=1)
@@ -22,7 +22,7 @@ eval_callback = EvalCallback(env, best_model_save_path="./logs/",
                              deterministic=True, render=False)
 
 OLD_MODEL_NAME = "KrabbelTest015"
-MODEL_NAME = "KrabbelTest016"
+MODEL_NAME = "KrabbelTest018"
 LEARING_TIMESTEPS = 100_000
 USE_OLD_MODEL = False
 logdir = "logs"

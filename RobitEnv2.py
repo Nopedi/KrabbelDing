@@ -40,7 +40,7 @@ class RobitEnvironment(gym.Env):
         p.setGravity(0, 0, -10)
     
     def _get_new_rdm_target_pos(self):
-        self.DISTANCE = np.random.randint(5, 8)
+        self.DISTANCE = np.random.randint(8, 15)
         angl = np.random.randint(-60, 60)
         self.TARGET_POSITION = np.array((np.cos(angl*np.pi/180) * self.DISTANCE, np.sin(angl*np.pi/180) * self.DISTANCE, 1))
     
@@ -131,19 +131,20 @@ if __name__ == "__main__":
     # check_env(env)
     env.reset()
     step1 = np.array((1,-1,-1,1,-1,1,1,-1,1,-1,-1,1))
-    step2 = np.array((-1,-1,1,1,1,1,-1,-1,-1,-1,1,1))
-    step3 = step1 * -1
-    step4 = step2 * -1
+    step1 = step1 * 0.5    
+    # step2 = np.array((-1,-1,1,1,1,1,-1,-1,-1,-1,1,1))
+    # step3 = step1 * -1
+    # step4 = step2 * -1
     
     for _ in range(100):    
         obs, rwd, done, info = env.step(step1)
         print(info)
-        obs, rwd, done, info = env.step(step2)
-        print(info)
-        obs, rwd, done, info = env.step(step3)
-        print(info)
-        obs, rwd, done, info = env.step(step4)
-        print(info)
+        # obs, rwd, done, info = env.step(step2)
+        # print(info)
+        # obs, rwd, done, info = env.step(step3)
+        # print(info)
+        # obs, rwd, done, info = env.step(step4)
+        # print(info)
 
     # while 1:
     #     obs, rwd, done, indo = env.step(env.action_space.sample())
